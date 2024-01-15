@@ -2,6 +2,9 @@ To get started, simply click the button below...
 
 [![Contribute](https://www.eclipse.org/che/contribute.svg)](https://workspaces.openshift.com/f?url=https://github.com/devspaces-samples/ansible-devspaces-demo)
 
+# Config
+* The config file needs to be in `/ansible_collections/` directory
+* When you run a command from the command line, 
 
 # Ansible Development on OpenShift Dev Spaces
 

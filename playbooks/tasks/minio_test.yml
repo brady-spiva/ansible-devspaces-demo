@@ -1,0 +1,83 @@
+---
+# code: language=ansible
+- name: Testing Bucket Creation & Removal
+  hosts: localhost
+  vars:
+    minio_url: "http://localhost:9000"
+    bucket_name: "ansible-test"
+    object_name: "test-file-object"
+    access_key: "minioadmin"
+    secret_key: "minioadmin"
+  tasks:
+    - name: Print info
+      ansible.builtin.debug:
+        msg: "Testing Bucket Creation & Removal"
+
+    #### Creating a bucket
+    - name: Create a bucket
+      rh1.minio.bucket:
+        minio_url: "{{ minio_url }}"
+        name: "{{ bucket_name }}"
+        state: present
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
+    
+    - name: Print info
+      ansible.builtin.debug:
+        msg: "Bucket {{ bucket_name }} created"
+    
+    #### Creating an object
+    - name: Create a file object in the new bucket
+      rh1.minio.object:
+        minio_url: "{{ minio_url }}"
+        bucket: "{{ bucket_name }}"
+        object: "{{ object_name }}"
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
+        src: hello_world.txt
+        mode: fput
+
+    - name: Print info
+      ansible.builtin.debug:
+        msg: "Object {{ object_name }} created in bucket {{ bucket_name }}"
+
+    #### Downloading an object
+    - name: Download a file object
+      rh1.minio.object:
+        minio_url: "{{ minio_url }}"
+        bucket: "{{ bucket_name }}"
+        object: "{{ object_name }}"
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
+        dest: "fresh_download_hello_world.txt"
+        mode: fget
+
+    - name: Print info
+      ansible.builtin.debug:
+        msg: "Object {{ object_name }} downloaded from bucket {{ bucket_name }} to destination ./fresh_download_hello_world.txt"
+
+    #### Removing an object
+    - name: Remove a file object
+      rh1.minio.bucket:
+        minio_url: "{{ minio_url }}"
+        name: "{{ bucket_name }}"
+        object: "{{ object_name }}"
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
+        
+    - name: Print info
+      ansible.builtin.debug:
+        msg: "Object {{ object_name }} removed from bucket {{ bucket_name }}"
+    
+    #### Deleting a bucket
+    - name: Delete a bucket
+      rh1.minio.bucket:
+        minio_url: "{{ minio_url }}"
+        name: "{{ bucket_name }}"
+        state: absent
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
+
+    - name: Print info
+      ansible.builtin.debug:
+        msg: "Bucket {{ bucket_name }} deleted"
