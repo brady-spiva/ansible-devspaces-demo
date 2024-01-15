@@ -30,7 +30,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/resourceLimits/maxNodesTotal
-        value: 33
+        value: 13
       - op: remove
         path: /spec/resourceLimits/gpus
       - op: replace
