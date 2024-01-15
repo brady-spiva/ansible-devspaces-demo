@@ -5,7 +5,6 @@
 from __future__ import (absolute_import, division, print_function)
 from minio import Minio
 from minio.error import S3Error
-from urllib.request import urlopen
 __metaclass__ = type
 
 DOCUMENTATION = r'''
@@ -74,12 +73,7 @@ message:
 
 from ansible.module_utils.basic import AnsibleModule
 
-client = Minio("play.min.io",
-    access_key="Q3AM3UQ867SPQQA43P2F",
-    secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
-)
-
-def get_object(bucket, object):
+def get_object(client, bucket, object):
     # Get object.
     try:
         response = client.get_object(bucket, object)
@@ -88,12 +82,9 @@ def get_object(bucket, object):
         response.close()
         response.release_conn()
 
-def put_object(bucket, object, src):
+def put_object(client, bucket, object, src):
     # Put object.
     # Upload unknown sized data.
-    src = urlopen(
-        "https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.81.tar.xz",
-    )
     result = client.put_object(
         bucket, object, src, length=-1, part_size=10*1024*1024,
     )
@@ -103,23 +94,20 @@ def put_object(bucket, object, src):
         ),
     )
 
-def fget_object(bucket, object, dest):
-    # Download data of an object.
+def fget_object(client, bucket, object, dest):
+    # Download an object file.
     client.fget_object(bucket, object, dest)
 
-def fput_object(bucket, object, src):
-    result = client.fput_object(
-       bucket, object, src,
-    )
-    print(
-        "created {0} object; etag: {1}, version-id: {2}".format(
-            result.object_name, result.etag, result.version_id,
-        ),
-    )
+def fput_object(client, bucket, object, src):
+    # Upload file 
+    client.fput_object(bucket, object, src)
 
-
-def remove_object(name):
+def remove_object(client, name):
     client.remove_object(name)
+
+def list_object(client, bucket):
+    objects = client.list_objects(bucket)
+    return objects
 
 def run_module():
     # define available arguments/parameters a user can pass to the module
@@ -147,6 +135,12 @@ def run_module():
         argument_spec=module_args,
         supports_check_mode=True
     )
+    
+    client = Minio(
+        module.params['minio_url'],
+        access_key=module.params['access_key'],
+        secret_key=module.params['secret_key'],
+    )
 
     # if the user is working with this module in only check mode we do not
     # want to make any changes to the environment, just return the current
@@ -155,21 +149,44 @@ def run_module():
         module.exit_json(**result)
 
     if module.params['mode'] == "get": 
-        get_object(module.params['bucket'], module.params['object'])
+        get_object(
+            client=client,
+            bucket=module.params['bucket'], 
+            object=module.params['object']
+        )
         # changed = True 
         # result['message'] = "object" + module.params['object'] + "was retrieved successfully." 
    
     elif module.params['mode'] == "put": 
-        put_object(module.params['bucket'], module.params['object'], module.params['src'])
+        put_object(
+            client=client,
+            bucket=module.params['bucket'], 
+            object=module.params['object'], 
+            src=module.params['src']
+        )
 
     elif module.params['mode'] == "remove": 
-        remove_object(module.params['bucket'], module.params['object'])
+        remove_object(
+            client=client,
+            bucket=module.params['bucket'], 
+            object=module.params['object']
+        )
 
     elif module.params['mode'] == "fput": 
-        fput_object(module.params['bucket'], module.params['object'], module.params['src'])
+        fput_object(
+            client=client,
+            bucket=module.params['bucket'], 
+            object=module.params['object'], 
+            src=module.params['src']
+        )
     
     elif module.params['mode'] == "fget": 
-        fget_object(module.params['bucket'], module.params['object'], module.params['dest'])
+        fget_object(
+            client=client,
+            bucket=module.params['bucket'], 
+            object=module.params['object'], 
+            dest=module.params['dest']
+        )
 
 #COPY LIST STAT 
 

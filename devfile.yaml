@@ -12,9 +12,7 @@ components:
       args: ['tail', '-f', '/dev/null']
       env:
         - name: 'ANSIBLE_CONFIG'
-          value: '/projects/rh1-custom-module/ansible.cfg'
-        - name: 'ANSIBLE_COLLECTIONS_PATH'
-          value: '${PROJECTS_ROOT}/.ansible/collections:/usr/share/ansible/collections:/projects/rh1-custom-module/collections/ansible_collections'
+          value: '${PROJECT_SOURCE}/ansible.cfg'
 commands:
   - id: oc-install
     exec:
