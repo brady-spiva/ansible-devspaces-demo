@@ -95,6 +95,7 @@ YAML
 
   # apply objects created in scratch dir
     oc apply -f ${OBJ_DIR}
+    oc apply -f ${OBJ_DIR}
 
 }
 
