@@ -71,6 +71,8 @@ metadata:
   name: ${W_USER}${i}
 YAML
 
+  oc apply -f "${OBJ_DIR}/namespace.yaml"
+
 # create rolebinding
 cat << YAML >> "${OBJ_DIR}/admin-rolebinding.yaml"
 ---
@@ -94,7 +96,6 @@ YAML
   done
 
   # apply objects created in scratch dir
-    oc apply -f ${OBJ_DIR}
     oc apply -f ${OBJ_DIR}
 
 }
