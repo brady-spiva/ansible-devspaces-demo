@@ -196,7 +196,7 @@ spec:
 }
 
 workshop_load_test_clean(){
-  oc delete DevWorkspace --all
+  oc delete devworkspace --all
   oc -n sandbox delete pod --all
 }
 
