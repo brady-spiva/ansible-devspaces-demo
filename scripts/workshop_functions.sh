@@ -41,7 +41,7 @@ workshop_create_user_htpasswd(){
 
   which htpasswd || return
 
-  for i in {1..50}
+  for i in {1..60}
   do
     htpasswd -bB ${FILE} "${W_USER}${i}" "${W_PASS}${i}"
   done
@@ -57,7 +57,7 @@ workshop_create_user_ns(){
   [ -e ${OBJ_DIR} ] && rm -rf ${OBJ_DIR}
   [ ! -d ${OBJ_DIR} ] && mkdir -p ${OBJ_DIR}
 
-  for i in {1..50}
+  for i in {1..60}
   do
 
 # create ns
@@ -98,13 +98,15 @@ YAML
 
 }
 
-cluster_autoscale_test(){
+workshop_autoscale_test(){
   APPS_INGRESS=apps.cluster-cfzzs.sandbox1911.opentlc.com
   NOTEBOOK_IMAGE_NAME=s2i-minimal-notebook:1.2
   NOTEBOOK_SIZE="Demo / Workshop"
 
-  for i in {1..50}
+  for i in {1..60}
   do
+
+  [oc get project sandbox ] && oc new-project sandbox
 
 echo "---
 apiVersion: v1
@@ -112,8 +114,8 @@ kind: Pod
 metadata:
   labels:
     run: test
-  name: test
-  namespace: ${W_USER}${i}
+  name: ${W_USER}${i}
+  namespace: sandbox
 spec:
   containers:
   - name: test
@@ -135,7 +137,7 @@ workshop_load_test(){
   NOTEBOOK_IMAGE_NAME=s2i-minimal-notebook:1.2
   NOTEBOOK_SIZE="Demo / Workshop"
 
-  for i in {1..50}
+  for i in {1..60}
   do
 
       NB_USER="user${i}"
@@ -198,7 +200,7 @@ workshop_load_test_clean(){
 }
 
 workshop_clean_user_ns(){
-  for i in {1..50}
+  for i in {1..60}
   do
     oc delete project "${W_USER}${i}"
   done
