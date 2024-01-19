@@ -106,7 +106,7 @@ workshop_autoscale_test(){
   for i in {1..60}
   do
 
-  [oc get project sandbox ] && oc new-project sandbox
+  oc get project sandbox || oc new-project sandbox
 
 echo "---
 apiVersion: v1
