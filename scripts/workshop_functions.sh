@@ -61,7 +61,7 @@ workshop_create_user_ns(){
   do
 
 # create ns
-cat << YAML >> "${OBJ_DIR}/namespace.yaml"
+cat << YAML >> "${OBJ_DIR}/${W_USER}${i}-ns.yaml"
 ---
 apiVersion: v1
 kind: Namespace
@@ -71,10 +71,10 @@ metadata:
   name: ${W_USER}${i}
 YAML
 
-  oc apply -f "${OBJ_DIR}/namespace.yaml"
+  oc apply -f "${OBJ_DIR}/${W_USER}${i}-ns.yaml"
 
 # create rolebinding
-cat << YAML >> "${OBJ_DIR}/admin-rolebinding.yaml"
+cat << YAML >> "${OBJ_DIR}/${W_USER}${i}-admin-rb.yaml"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -96,7 +96,7 @@ YAML
   done
 
   # apply objects created in scratch dir
-    oc apply -f ${OBJ_DIR}
+  oc apply -f "${OBJ_DIR}"
 
 }
 
