@@ -133,9 +133,8 @@ spec:
 }
 
 workshop_load_test(){
-  APPS_INGRESS=apps.cluster-cfzzs.sandbox1911.opentlc.com
-  NOTEBOOK_IMAGE_NAME=s2i-minimal-notebook:1.2
-  NOTEBOOK_SIZE="Demo / Workshop"
+
+  workshop_create_user_ns
 
   for i in {1..60}
   do
@@ -195,8 +194,8 @@ spec:
 }
 
 workshop_load_test_clean(){
-  oc -n rhods-notebooks delete notebooks.kubeflow.org --all
-  oc -n rhods-notebooks delete pvc --all
+  oc delete DevWorkspace --all
+  oc -n sandbox delete pod --all
 }
 
 workshop_clean_user_ns(){
