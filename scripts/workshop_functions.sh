@@ -103,10 +103,10 @@ workshop_autoscale_test(){
   NOTEBOOK_IMAGE_NAME=s2i-minimal-notebook:1.2
   NOTEBOOK_SIZE="Demo / Workshop"
 
+  oc get project sandbox || oc new-project sandbox
+
   for i in {1..60}
   do
-
-  oc get project sandbox || oc new-project sandbox
 
 echo "---
 apiVersion: v1
