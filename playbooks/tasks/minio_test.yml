@@ -21,11 +21,11 @@
         state: present
         access_key: "{{ access_key }}"
         secret_key: "{{ secret_key }}"
-    
+
     - name: Print info
       ansible.builtin.debug:
         msg: "Bucket {{ bucket_name }} created"
-    
+
     #### Creating an object
     - name: Create a file object in the new bucket
       rh1.minio.object:
@@ -64,11 +64,11 @@
         object: "{{ object_name }}"
         access_key: "{{ access_key }}"
         secret_key: "{{ secret_key }}"
-        
+
     - name: Print info
       ansible.builtin.debug:
         msg: "Object {{ object_name }} removed from bucket {{ bucket_name }}"
-    
+
     #### Deleting a bucket
     - name: Delete a bucket
       rh1.minio.bucket:
