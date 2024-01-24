@@ -1,9 +1,8 @@
+# Ansible Development on OpenShift Dev Spaces
+
 To get started, simply click the button below...
 
 [![Contribute](https://www.eclipse.org/che/contribute.svg)](https://workspaces.openshift.com/f?url=https://github.com/devspaces-samples/ansible-devspaces-demo)
-
-
-# Ansible Development on OpenShift Dev Spaces
 
 This repository provides a development environment for Ansible playbook creation, testing with Molecule, and ansible-lint checks using OpenShift Dev Spaces.
 
@@ -47,12 +46,14 @@ git config --global user.email homer@springfieldpower.com
 A sample role has been provided in the collections/ansible_collections/sample_namespace/sample_collection/roles/backup_file directory to experiment with Test Driven Development using Molecule and OpenShift DevSpaces. A molecule verifier has been configured to test that the role functions as expected.
 
 ### Automation requirements
+
 1. Make a backup of a file identified using the backup_file_source variable
 2. The backup should be stored in the directory identified by the backup_file_dest_folder variable
 3. If the backup directory doesn't exist, it should be created and writable
 4. The backup file should have a suffix appended such as '.bak' which is identified by the backup_file_dest_suffix variable
 
 ### To begin development against the backup_file role
+
 1. Click the three horizontal bar icon in the top left of the window and select 'Terminal' -> 'New Terminal'
 2. Click into the terminal window
 3. Change directory into backup file role `cd collections/ansible_collections/sample_namespace/sample_collection/extensions/`
@@ -69,4 +70,5 @@ To reset your test pod back to a fresh instance you can run `molecule destroy` a
 Contributions to this repository are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue with [Red Hat](https://issues.redhat.com/projects/CRW/issues).
 
 ## Code of Conduct
+
 We ask all of our community members and contributors to adhere to the [Ansible code of conduct](http://docs.ansible.com/ansible/latest/community/code_of_conduct.html). If you have questions or need assistance, please reach out to our community team at [codeofconduct@ansible.com](mailto:codeofconduct@ansible.com)
