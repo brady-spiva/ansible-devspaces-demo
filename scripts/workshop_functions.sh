@@ -6,7 +6,7 @@ GROUP_ADMINS=workshop-admins
 # GROUP_USERS=workshop-users
 TMP_DIR=scratch
 # HTPASSWD=htpasswd-workshop-secret
-# WORKSHOP_USERS=25
+WORKSHOP_USERS=50
 
 usage(){
   echo "Workshop: Functions Loaded"
@@ -41,14 +41,17 @@ workshop_create_user_htpasswd(){
 
   which htpasswd || return
 
-  for i in {1..50}
+  echo "# ${W_USER}x: ${W_PASS}" > "${FILE}"
+
+  for ((i=1;i<=WORKSHOP_USERS;i++))
   do
-    htpasswd -bB ${FILE} "${W_USER}${i}" "${W_PASS}${i}"
+    htpasswd -bB "${FILE}" "${W_USER}${i}" "${W_PASS}"
   done
 
   echo "created: ${FILE}" 
-  # oc -n openshift-config create secret generic ${HTPASSWD} --from-file=${FILE}
-  # oc -n openshift-config set data secret/${HTPASSWD} --from-file=${FILE}
+  oc -n openshift-config create secret generic htpasswd --from-file="${FILE}"
+  oc -n openshift-config set data secret/htpasswd --from-file="${FILE}"
+  oc apply -f gitops/02-components/oauth.yaml
 
 }
 
@@ -57,22 +60,35 @@ workshop_create_user_ns(){
   [ -e ${OBJ_DIR} ] && rm -rf ${OBJ_DIR}
   [ ! -d ${OBJ_DIR} ] && mkdir -p ${OBJ_DIR}
 
-  for i in {1..50}
+  for ((i=1;i<=WORKSHOP_USERS;i++))
   do
 
 # create ns
-cat << YAML >> "${OBJ_DIR}/namespace.yaml"
+cat << YAML >> "${OBJ_DIR}/${W_USER}${i}-ns.yaml"
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
     openshift.io/display-name: Start Here - ${W_USER}${i}
+  labels:
+    workshop: ansible
   name: ${W_USER}${i}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/display-name: Workspace - ${W_USER}${i}
+  labels:
+    workshop: ansible
+  name: workspace-${W_USER}${i}
 YAML
 
+  oc apply -f "${OBJ_DIR}/${W_USER}${i}-ns.yaml"
+
 # create rolebinding
-cat << YAML >> "${OBJ_DIR}/admin-rolebinding.yaml"
+cat << YAML >> "${OBJ_DIR}/${W_USER}${i}-admin-rb.yaml"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -94,16 +110,16 @@ YAML
   done
 
   # apply objects created in scratch dir
-    oc apply -f ${OBJ_DIR}
+  oc apply -f "${OBJ_DIR}"
 
 }
 
-cluster_autoscale_test(){
+workshop_autoscale_test(){
   APPS_INGRESS=apps.cluster-cfzzs.sandbox1911.opentlc.com
   NOTEBOOK_IMAGE_NAME=s2i-minimal-notebook:1.2
   NOTEBOOK_SIZE="Demo / Workshop"
 
-  for i in {1..50}
+  for ((i=1;i<=WORKSHOP_USERS;i++))
   do
 
 echo "---
@@ -112,8 +128,8 @@ kind: Pod
 metadata:
   labels:
     run: test
-  name: test
-  namespace: ${W_USER}${i}
+  name: ${W_USER}${i}
+  namespace: sandbox
 spec:
   containers:
   - name: test
@@ -131,82 +147,26 @@ spec:
 }
 
 workshop_load_test(){
-  APPS_INGRESS=apps.cluster-cfzzs.sandbox1911.opentlc.com
-  NOTEBOOK_IMAGE_NAME=s2i-minimal-notebook:1.2
-  NOTEBOOK_SIZE="Demo / Workshop"
 
-  for i in {1..50}
+  workshop_create_user_ns
+
+  for ((i=1;i<=WORKSHOP_USERS;i++))
   do
-
-      NB_USER="user${i}"
-
-echo "---
-apiVersion: workspace.devfile.io/v1alpha2
-kind: DevWorkspace
-metadata:
-  name: python-hello-world
-  namespace: ${W_USER}${i}
-  labels:
-    controller.devfile.io/creator: ''
-spec:
-  contributions:
-    - kubernetes:
-        name: che-code-python-hello-world
-      name: editor
-  routingClass: che
-  started: true
-  template:
-    attributes:
-      controller.devfile.io/devworkspace-config:
-        name: devworkspace-config
-        namespace: devspaces
-      controller.devfile.io/storage-type: per-user
-    commands:
-      - exec:
-          commandLine: python3 hello-world.py
-          component: tools
-          group:
-            kind: run
-          label: Run application
-          workingDir: '${PROJECT_SOURCE}'
-        id: run-application
-    components:
-      - container:
-          image: 'quay.io/devfile/universal-developer-image:ubi8-latest'
-          memoryLimit: 512Mi
-          mountSources: true
-          sourceMapping: /projects
-          volumeMounts:
-            - name: venv
-              path: /home/user/.venv
-        name: tools
-      - name: venv
-        volume:
-          size: 1G
-    projects:
-      - name: python-hello-world
-        zip:
-          location: >-
-            https://eclipse-che.github.io/che-devfile-registry/main/resources/v2/python-hello-world.zip
-" | oc apply -f -
+    oc apply -n workspace-"${W_USER}${i}" -f gitops/02-components/devspace.yaml
   done
 }
 
 workshop_load_test_clean(){
-  oc -n rhods-notebooks delete notebooks.kubeflow.org --all
-  oc -n rhods-notebooks delete pvc --all
+  oc delete devworkspace --all -A
+  oc -n sandbox delete pod --all
 }
 
 workshop_clean_user_ns(){
-  for i in {1..50}
-  do
-    oc delete project "${W_USER}${i}"
-  done
-}
-
-workshop_clean_user_notebooks(){
-  oc -n rhods-notebooks \
-    delete po -l app=jupyterhub
+  oc delete project -l workshop=ansible
+  # for ((i=1;i<=WORKSHOP_USERS;i++))
+  # do
+  #   oc delete project "${W_USER}${i}"
+  # done
 }
 
 workshop_setup(){
@@ -219,7 +179,6 @@ workshop_clean(){
   echo "Workshop: Clean User Namespaces"
   check_init
   workshop_clean_user_ns
-  workshop_clean_user_notebooks
 }
 
 workshop_reset(){
