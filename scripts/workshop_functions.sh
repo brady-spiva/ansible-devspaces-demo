@@ -179,7 +179,6 @@ workshop_clean(){
   echo "Workshop: Clean User Namespaces"
   check_init
   workshop_clean_user_ns
-  workshop_clean_user_notebooks
 }
 
 workshop_reset(){
