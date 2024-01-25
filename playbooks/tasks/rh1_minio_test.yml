@@ -1,0 +1,37 @@
+---
+# code: language=ansible
+- name: Testing Bucket Creation & Removal
+  hosts: localhost
+  vars:
+    endpoint: "play.min.io"
+    access_key: "minioadmin"
+    secret_key: "minioadmin"
+    bucket_name: "ansible-test"
+  tasks:
+    # Creating a bucket
+    - name: Create a bucket
+      rh1.minio.bucket:
+        endpoint: "{{ endpoint }}"
+        bucket_name: "{{ bucket_name }}"
+        state: present
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
+
+    - name: Print info
+      ansible.builtin.debug:
+        msg: "Bucket {{ bucket_name }} created"
+
+    # TODO: Add a task that uploads "hello_world.txt" to
+    # the bucket created in the previous task.
+
+    # TODO: Add a task that downloads the object created in
+    # the previous task.
+
+    # EXTRA: Add a task that copies the object created to the existing bucket.
+
+    # EXTRA: Add a task that lists the existing objects.
+
+    # TODO: Add a task that removes the object created.
+
+    # TODO: Add a task that removes the bucket created.
+
