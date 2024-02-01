@@ -1,3 +1,2 @@
-# Ansible Collection - example.collection
+# Ansible Collection - rh1.minio
 
-An example collection to show off how to do Ansible collection and role development in Red Hat OpenShift Dev Spaces.
