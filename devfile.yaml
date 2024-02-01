@@ -4,7 +4,7 @@ metadata:
 components:
   - name: tooling-container
     container:
-      image: quay.io/devspaces/ansible-creator-ee@sha256:cffd700f8199306cec8d2d0eae202280d3fbf5e3f68c860b492de2eb511c25c0
+      image: quay.io/devspaces/ansible-creator-ee@sha256:aae7d4408ddfba4da6be6311cef177ecb45c82881e2b230285df8ebe33a6b2b6
       memoryRequest: 256M
       memoryLimit: 6Gi
       cpuRequest: 250m
@@ -14,72 +14,21 @@ components:
         - name: 'ANSIBLE_CONFIG'
           value: '${PROJECT_SOURCE}/ansible.cfg'
 commands:
+  - id: install-dependencies
+    exec:
+      commandLine: pip install -r ${PROJECT_SOURCE}/requirements.txt
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
+      component: tooling-container
+      
   - id: oc-install
     exec:
       commandLine: '/usr/local/bin/ansible-playbook ${PROJECT_SOURCE}/playbooks/install_oc.yml'
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
-        isDefault: true
-      component: tooling-container
-
-  - id: molecule-create
-    exec:
-      label: "1.Molecule: start a test pod for the automation"
-      commandLine: 'source $HOME/.bashrc && molecule create'
-      workingDir: ${PROJECTS_ROOT}/rh1-custom-module/collections/ansible_collections/sample_namespace/sample_collection/extensions
-      group:
-        kind: run
-        isDefault: true
-      component: tooling-container
-
-  - id: molecule-list
-    exec:
-      label: "2.Molecule: view the test instance that was created"
-      commandLine: 'source $HOME/.bashrc && molecule list'
-      workingDir: ${PROJECTS_ROOT}/rh1-custom-module/collections/ansible_collections/sample_namespace/sample_collection/extensions
-      group:
-        kind: run
-        isDefault: true
-      component: tooling-container
-
-  - id: molecule-verify
-    exec:
-      label: "3.Molecule: run the verification against the test pod"
-      commandLine: 'source $HOME/.bashrc && molecule verify'
-      workingDir: ${PROJECTS_ROOT}/rh1-custom-module/collections/ansible_collections/sample_namespace/sample_collection/extensions
-      group:
-        kind: run
-        isDefault: true
-      component: tooling-container
-
-  - id: molecule-converge
-    exec:
-      label: "4.Molecule: apply the role to the pod"
-      commandLine: 'source $HOME/.bashrc && molecule converge'
-      workingDir: ${PROJECTS_ROOT}/rh1-custom-module/collections/ansible_collections/sample_namespace/sample_collection/extensions
-      group:
-        kind: run
-        isDefault: true
-      component: tooling-container
-
-  - id: molecule-destroy
-    exec:
-      label: "5.Molecule: reset the test pod back to a fresh instance"
-      commandLine: 'source $HOME/.bashrc && molecule destroy'
-      workingDir: ${PROJECTS_ROOT}/rh1-custom-module/collections/ansible_collections/sample_namespace/sample_collection/extensions
-      group:
-        kind: run
-        isDefault: true
-      component: tooling-container
-
-  - id: molecule-test
-    exec:
-      label: "6.Molecule: run the full molecule test"
-      commandLine: 'source $HOME/.bashrc && molecule test'
-      workingDir: ${PROJECTS_ROOT}/rh1-custom-module/collections/ansible_collections/sample_namespace/sample_collection/extensions
-      group:
-        kind: run
         isDefault: true
       component: tooling-container
 
@@ -96,4 +45,5 @@ commands:
       component: tooling-container
 events:
   postStart:
+    - "install-dependencies"
     - "oc-install"
