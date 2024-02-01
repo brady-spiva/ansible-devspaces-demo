@@ -8,7 +8,7 @@ This repository provides a development environment for Ansible playbook creation
 
 ## Summary
 
-This repository contains a `devfile.yaml` file, which defines the development environment for Ansible. The DevSpace created using this `devfile` provides the necessary tools and dependencies for Ansible playbook development, testing with Molecule, and linting with ansible-lint. This is designed to be used in environments where developers do not have easy access to linux systems from which to develop ansible automation content, but do have OpenShift.
+This repository contains a `devfile.yaml` file, which defines the development environment for Ansible. The Dev Space created using this `devfile` provides the necessary tools and dependencies for Ansible playbook development, testing with Molecule,  linting with ansible-lint, and for creating custom Ansible modules. This is designed to be used in environments where developers do not have easy access to Linux systems from which to develop ansible automation content, but do have OpenShift.
 
 The `devfile.yaml` includes configurations for:
 
@@ -16,11 +16,11 @@ The `devfile.yaml` includes configurations for:
 - Molecule (testing framework for Ansible roles)
 - Ansible Lint (tool for checking best practices and potential issues in Ansible code)
 
-You can use the provided DevSpace to start working on your Ansible projects immediately, without worrying about setting up the development environment manually.
+You can use the provided Dev Space to start working on your Ansible projects immediately, without worrying about setting up the development environment manually.
 
-## Setting up OpenShift DevSpaces
+## Setting up OpenShift Dev Spaces
 
-To get started with OpenShift Dev Spaces, refer to the [OpenShift Dev Spaces documentation](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/3.5/html/administration_guide/index) for detailed instructions on setting up your development environment and creating your DevSpaces.
+To get started with OpenShift Dev Spaces, refer to the [OpenShift Dev Spaces documentation](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/3.5/html/administration_guide/index) for detailed instructions on setting up your development environment and creating your Dev Spaces.
 
 ## Base Image Of Devfile
 
