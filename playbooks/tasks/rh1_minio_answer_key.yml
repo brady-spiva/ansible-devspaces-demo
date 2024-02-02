@@ -58,12 +58,13 @@
 
     #### Removing an object
     - name: Remove a file object
-      rh1.minio.bucket:
+      rh1.minio.object:
         minio_url: "{{ minio_url }}"
-        name: "{{ bucket_name }}"
+        bucket_name: "{{ bucket_name }}"
         object_name: "{{ object_name }}"
         access_key: "{{ access_key }}"
         secret_key: "{{ secret_key }}"
+        mode: remove
 
     - name: Print info
       ansible.builtin.debug:
