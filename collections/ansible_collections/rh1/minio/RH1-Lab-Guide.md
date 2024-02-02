@@ -14,6 +14,15 @@ The main files you will need to edit include:
 - [object.py](plugins/modules/object.py)
 - [rh1_minio_test.yml](../../../../playbooks/tasks/rh1_minio_test.yml) 
 
+Credentials and endpoints:
+- MinIO Console: https://minio-console-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
+- MinIO API: minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
+- Access Key: minioadmin
+- Secret Key: minioadmin
+- Bucket Nameing Convention: ansible-test-{your_user_number} (e.g. ansible-test-1)
+- Object Naming Convention: test-file-object (no constraints on this, don't be too profane!)
+- 
+
 ## Getting Started 
 Under the rh1.minio collection directory, go to **plugins** &rarr; **modules** &rarr; **[bucket.py](plugins/modules/bucket.py)**. The functionality to create a MinIO bucket is given to you. 
 ```python
@@ -34,9 +43,9 @@ Go to **playbooks** &rarr; **tasks** &rarr; **[rh1_minio_test.yml](../../../../p
 - name: Testing Bucket Creation & Removal
   hosts: localhost
   vars:
-    minio_url: "MINIO_URL"
-    access_key: "minio"
-    secret_key: "minio123"
+    minio_url: "minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com"
+    access_key: "minioadmin"
+    secret_key: "minioadmin"
     bucket_name: "UPDATE_ME"
     object_name: "test-file-object"
   tasks:
