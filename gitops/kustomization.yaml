@@ -6,6 +6,7 @@ resources:
   # - 01-operator-configs
   - 02-components
   - demo-devspaces-autoscale
+  - minio
 
 patches:
   - target:
