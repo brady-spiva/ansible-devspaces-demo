@@ -3,9 +3,9 @@
 - name: Testing Bucket Creation & Removal
   hosts: localhost
   vars:
-    minio_url: https://minio-api-minio-operator.apps.cluster-j25vk.j25vk.sandbox2792.opentlc.com  # "http://localhost:9000"
-    access_key: minio  # "minioadmin"
-    secret_key: minio123  # "minioadmin"
+    minio_url: "https://minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com/"
+    access_key: "minioadmin"
+    secret_key: "minioadmin"
     bucket_name: "ansible-test"
     object_name: "test-file-object"
   tasks:
