@@ -77,7 +77,7 @@ def make_bucket(client, name, location, object_lock):
     # Create bucket.
     buckets = client.list_buckets()
     if name not in buckets: 
-        client.make_bucket(name, location, object_lock)
+        client.make_bucket(name)
         return "Bucket" + name + "was created." 
     else: 
         return "Bucket" + name + "already exists"

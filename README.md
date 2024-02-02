@@ -65,6 +65,10 @@ A sample role has been provided in the collections/ansible_collections/sample_na
 
 To reset your test pod back to a fresh instance you can run `molecule destroy` and then `molecule create` to recreate it. To run the full molecule test without stepping through each stage, run `molecule test`.
 
+## TODOs
+
+- [ ] Update the docs to show how to use this locally as well as in OpenShift Dev Spaces
+
 ## Contributing
 
 Contributions to this repository are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue with [Red Hat](https://issues.redhat.com/projects/CRW/issues).
