@@ -18,8 +18,8 @@ version_added: "1.0.0"
 description: Ansible custom module for interacting with MinIO to put, get, remove, list, and copy objects.
 
 options:
-    endpoint: 
-        description: The MinIO server endpoint.
+    minio_url: 
+        description: The MinIO server minio_url.
         required: true
         type: str
     
@@ -71,7 +71,7 @@ EXAMPLES = r'''
 # Upload an object to a bucket
 - name: Upload an object
   rh1.minio.object:
-    endpoint: {{ endpoint }}
+    minio_url: {{ minio_url }}
     access_key: {{ access_key }}
     secret_ket: {{ secret_key }}
     bucket_name: rh1_bucket
@@ -81,7 +81,7 @@ EXAMPLES = r'''
 # List objects in a specified bucket
 - name: List objects in rh1_bucket
   rh1.minio.object:
-    endpoint: {{ endpoint }}
+    minio_url: {{ minio_url }}
     access_key: {{ access_key }}
     secret_ket: {{ secret_key }}
     bucket_name: rh1_bucket
@@ -95,7 +95,7 @@ EXAMPLES = r'''
 # Copy existing object to new object in the same bucket
 - name: Copy rh1_object
   rh1.minio.object:
-    endpoint: {{ endpoint }}
+    minio_url: {{ minio_url }}
     access_key: {{ access_key }}
     secret_ket: {{ secret_key }}
     src_bucket_name: rh1_bucket
@@ -176,7 +176,7 @@ def run_module():
         mode=dict(type='str', choices=['copy', 'list', 'remove', 'fget', 'fput'], required=True),
         access_key=dict(type='str', required=True),
         secret_key=dict(type='str', required=True),
-        endpoint=dict(type='str', required=True),
+        minio_url=dict(type='str', required=True),
     )
 
     result = dict(
@@ -190,7 +190,7 @@ def run_module():
     )
     
     client = Minio(
-        module.params['endpoint'],
+        module.params['minio_url'],
         access_key=module.params['access_key'],
         secret_key=module.params['secret_key'],
     )

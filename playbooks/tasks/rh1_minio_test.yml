@@ -8,11 +8,11 @@
     secret_key: "minioadmin"
     bucket_name: "ansible-test"
   tasks:
-    # Creating a bucket
+    #### Creating a bucket
     - name: Create a bucket
       rh1.minio.bucket:
-        endpoint: "{{ endpoint }}"
-        bucket_name: "{{ bucket_name }}"
+        minio_url: "{{ minio_url }}"
+        name: "{{ bucket_name }}"
         state: present
         access_key: "{{ access_key }}"
         secret_key: "{{ secret_key }}"
