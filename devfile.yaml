@@ -44,6 +44,6 @@ commands:
       workingDir: ${PROJECTS_ROOT}/rh1-custom-module
       component: tooling-container
 events:
-  preStart:
+  postStart:
     - "install-dependencies"
     - "oc-install"
