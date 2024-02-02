@@ -73,7 +73,7 @@ message:
 
 from ansible.module_utils.basic import AnsibleModule
 
-def make_bucket(client, name, location, object_lock):
+def make_bucket(client, name):
     # Create bucket.
     buckets = client.list_buckets()
     if name not in buckets: 
@@ -93,6 +93,7 @@ def remove_bucket(client, name):
 def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
+        minio_url=dict(type='str', required=True),
         name=dict(type='str', required=True),
         state=dict(type='str', default='present', choices=['present','absent']),
         access_key=dict(type='str', required=True),
@@ -134,8 +135,6 @@ def run_module():
         make_bucket(
             client=client,
             name=module.params['name'],
-            location=module.params['location'],
-            object_lock=module.params['object_lock']
         )
 
     elif module.params['state'] == "absent": 
