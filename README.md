@@ -1,15 +1,14 @@
+# Ansible Development on OpenShift Dev Spaces
+
 To get started, simply click the button below...
 
 [![Contribute](https://www.eclipse.org/che/contribute.svg)](https://workspaces.openshift.com/f?url=https://github.com/devspaces-samples/ansible-devspaces-demo)
-
-
-# Ansible Development on OpenShift Dev Spaces
 
 This repository provides a development environment for Ansible playbook creation, testing with Molecule, and ansible-lint checks using OpenShift Dev Spaces.
 
 ## Summary
 
-This repository contains a `devfile.yaml` file, which defines the development environment for Ansible. The DevSpace created using this `devfile` provides the necessary tools and dependencies for Ansible playbook development, testing with Molecule, and linting with ansible-lint. This is designed to be used in environments where developers do not have easy access to linux systems from which to develop ansible automation content, but do have OpenShift.
+This repository contains a `devfile.yaml` file, which defines the development environment for Ansible. The Dev Space created using this `devfile` provides the necessary tools and dependencies for Ansible playbook development, testing with Molecule,  linting with ansible-lint, and for creating custom Ansible modules. This is designed to be used in environments where developers do not have easy access to Linux systems from which to develop ansible automation content, but do have OpenShift.
 
 The `devfile.yaml` includes configurations for:
 
@@ -17,11 +16,11 @@ The `devfile.yaml` includes configurations for:
 - Molecule (testing framework for Ansible roles)
 - Ansible Lint (tool for checking best practices and potential issues in Ansible code)
 
-You can use the provided DevSpace to start working on your Ansible projects immediately, without worrying about setting up the development environment manually.
+You can use the provided Dev Space to start working on your Ansible projects immediately, without worrying about setting up the development environment manually.
 
-## Setting up OpenShift DevSpaces
+## Setting up OpenShift Dev Spaces
 
-To get started with OpenShift Dev Spaces, refer to the [OpenShift Dev Spaces documentation](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/3.5/html/administration_guide/index) for detailed instructions on setting up your development environment and creating your DevSpaces.
+To get started with OpenShift Dev Spaces, refer to the [OpenShift Dev Spaces documentation](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/3.5/html/administration_guide/index) for detailed instructions on setting up your development environment and creating your Dev Spaces.
 
 ## Base Image Of Devfile
 
@@ -47,12 +46,14 @@ git config --global user.email homer@springfieldpower.com
 A sample role has been provided in the collections/ansible_collections/sample_namespace/sample_collection/roles/backup_file directory to experiment with Test Driven Development using Molecule and OpenShift DevSpaces. A molecule verifier has been configured to test that the role functions as expected.
 
 ### Automation requirements
+
 1. Make a backup of a file identified using the backup_file_source variable
 2. The backup should be stored in the directory identified by the backup_file_dest_folder variable
 3. If the backup directory doesn't exist, it should be created and writable
 4. The backup file should have a suffix appended such as '.bak' which is identified by the backup_file_dest_suffix variable
 
 ### To begin development against the backup_file role
+
 1. Click the three horizontal bar icon in the top left of the window and select 'Terminal' -> 'New Terminal'
 2. Click into the terminal window
 3. Change directory into backup file role `cd collections/ansible_collections/sample_namespace/sample_collection/extensions/`
@@ -64,9 +65,14 @@ A sample role has been provided in the collections/ansible_collections/sample_na
 
 To reset your test pod back to a fresh instance you can run `molecule destroy` and then `molecule create` to recreate it. To run the full molecule test without stepping through each stage, run `molecule test`.
 
+## TODOs
+
+- [ ] Update the docs to show how to use this locally as well as in OpenShift Dev Spaces
+
 ## Contributing
 
 Contributions to this repository are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue with [Red Hat](https://issues.redhat.com/projects/CRW/issues).
 
 ## Code of Conduct
+
 We ask all of our community members and contributors to adhere to the [Ansible code of conduct](http://docs.ansible.com/ansible/latest/community/code_of_conduct.html). If you have questions or need assistance, please reach out to our community team at [codeofconduct@ansible.com](mailto:codeofconduct@ansible.com)

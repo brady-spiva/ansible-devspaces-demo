@@ -1,0 +1,120 @@
+apiVersion: workspace.devfile.io/v1alpha2
+kind: DevWorkspace
+metadata:
+  annotations:
+    che.eclipse.org/devfile: |
+      schemaVersion: 2.2.0
+      metadata:
+        name: ansible-demo
+      components:
+        - name: tooling-container
+          container:
+            image: >-
+              quay.io/devspaces/ansible-creator-ee@sha256:5f8235b17caced952ebc663ffcf2398653aec4e72d93779a5e72021b549f0a9e
+            memoryRequest: 256M
+            memoryLimit: 6Gi
+            cpuRequest: 250m
+            cpuLimit: 2000m
+            args:
+              - tail
+              - '-f'
+              - /dev/null
+      commands:
+        - id: oc-install
+          exec:
+            commandLine: >-
+              /usr/local/bin/ansible-playbook
+              ${PROJECT_SOURCE}/playbooks/install_oc.yml
+            workingDir: ${PROJECT_SOURCE}
+            group:
+              kind: build
+              isDefault: true
+            component: tooling-container
+        - id: molecule-test
+          exec:
+            label: 'Molecule: Run Scenario for Backup Role'
+            commandLine: source $HOME/.bashrc && molecule test
+            workingDir: >-
+              ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/example/collection/roles/backup_file
+            group:
+              kind: run
+              isDefault: true
+            component: tooling-container
+        - id: molecule-verify
+          exec:
+            label: 'Molecule: Validate Backup File Role'
+            commandLine: source $HOME/.bashrc && molecule verify
+            workingDir: >-
+              ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/example/collection/roles/backup_file
+            group:
+              kind: run
+              isDefault: true
+            component: tooling-container
+      events:
+        postStart:
+          - oc-install
+      projects:
+        - name: ansible-devspaces-demo
+          zip:
+            location: 'http://devfile-registry.devspaces.svc:8080/resources/v2/ansible-devspaces-demo.zip'
+  name: ansible-demo
+spec:
+  contributions:
+  - kubernetes:
+      name: che-code-ansible-demo
+    name: editor
+  routingClass: che
+  started: true
+  template:
+    attributes:
+      controller.devfile.io/devworkspace-config:
+        name: devworkspace-config
+        namespace: devspaces
+      controller.devfile.io/storage-type: per-user
+    commands:
+    - exec:
+        commandLine: /usr/local/bin/ansible-playbook ${PROJECT_SOURCE}/playbooks/install_oc.yml
+        component: tooling-container
+        group:
+          isDefault: true
+          kind: build
+        workingDir: ${PROJECT_SOURCE}
+      id: oc-install
+    - exec:
+        commandLine: source $HOME/.bashrc && molecule test
+        component: tooling-container
+        group:
+          isDefault: true
+          kind: run
+        label: 'Molecule: Run Scenario for Backup Role'
+        workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/example/collection/roles/backup_file
+      id: molecule-test
+    - exec:
+        commandLine: source $HOME/.bashrc && molecule verify
+        component: tooling-container
+        group:
+          isDefault: true
+          kind: run
+        label: 'Molecule: Validate Backup File Role'
+        workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/example/collection/roles/backup_file
+      id: molecule-verify
+    components:
+    - container:
+        args:
+        - tail
+        - -f
+        - /dev/null
+        cpuLimit: 2000m
+        cpuRequest: 250m
+        image: quay.io/devspaces/ansible-creator-ee@sha256:5f8235b17caced952ebc663ffcf2398653aec4e72d93779a5e72021b549f0a9e
+        memoryLimit: 6Gi
+        memoryRequest: 256M
+        sourceMapping: /projects
+      name: tooling-container
+    events:
+      postStart:
+      - oc-install
+    projects:
+    - name: ansible-devspaces-demo
+      zip:
+        location: http://devfile-registry.devspaces.svc:8080/resources/v2/ansible-devspaces-demo.zip

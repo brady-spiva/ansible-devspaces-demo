@@ -1,0 +1,45 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # - 00-operators
+  # - 01-operator-configs
+  - 02-components
+  - demo-devspaces-autoscale
+
+patches:
+  - target:
+      kind: ConsoleNotification
+      name: banner-demo
+    patch: |-
+      - op: replace
+        path: /spec/text
+        value: 'WORKSHOP: Dev Spaces on OpenShift'
+  - target:
+      group: batch
+      kind: Job
+      name: machineset-setup
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/2/value
+        value: '10'
+  - target:
+      group: autoscaling.openshift.io
+      kind: ClusterAutoscaler
+      name: default
+    patch: |-
+      - op: replace
+        path: /spec/resourceLimits/maxNodesTotal
+        value: 13
+      - op: remove
+        path: /spec/resourceLimits/gpus
+      - op: replace
+        path: /spec/resourceLimits/cores
+        value:
+          min: 0
+          max: 528
+      - op: replace
+        path: /spec/resourceLimits/memory
+        value:
+          min: 0
+          max: 2112
