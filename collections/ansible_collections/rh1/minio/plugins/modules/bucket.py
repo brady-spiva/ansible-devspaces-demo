@@ -36,37 +36,34 @@ options:
 #     - my_namespace.my_collection.my_doc_fragment_name
 
 author:
-    - Your Name (@yourGitHubHandle)
+    - Brady Spiva (@brady-spiva)
 '''
 
 EXAMPLES = r'''
-# Pass in a message
-- name: Test with a message
-  my_namespace.my_collection.my_test:
-    name: hello world
+# Create a bucket
+- name: Create a bucket
+    rh1.minio.bucket:
+        minio_url: "{{ minio_url }}"
+        name: "{{ bucket_name }}"
+        state: present
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
 
-# pass in a message and have changed true
-- name: Test with a message and changed output
-  my_namespace.my_collection.my_test:
-    name: hello world
-    new: true
-
-# fail the module
-- name: Test failure of the module
-  my_namespace.my_collection.my_test:
-    name: fail me
+# Delete a bucket
+- name: Delete a bucket
+    rh1.minio.bucket:
+        minio_url: "{{ minio_url }}"
+        name: "{{ bucket_name }}"
+        state: absent
+        access_key: "{{ access_key }}"
+        secret_key: "{{ secret_key }}"
 '''
 
 RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
-original_message:
-    description: The original name param that was passed in.
-    type: str
-    returned: always
-    sample: 'hello world'
-message:
-    description: The output message that the test module generates.
-    type: str
+changed:
+    description: Whether or not the module has made changes
+    type: bool
     returned: always
     sample: 'goodbye'
 '''

@@ -14,14 +14,18 @@ The main files you will need to edit include:
 - [object.py](plugins/modules/object.py)
 - [rh1_minio_test.yml](../../../../playbooks/tasks/rh1_minio_test.yml) 
 
-Credentials and endpoints:
-- MinIO Console: https://minio-console-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
-- MinIO API: minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
-- Access Key: minioadmin
-- Secret Key: minioadmin
-- Bucket Nameing Convention: ansible-test-{your_user_number} (e.g. ansible-test-1)
-- Object Naming Convention: test-file-object (no constraints on this, don't be too profane!)
-- 
+### Credentials and endpoints:
+- **OpenShift Cluster URL** (will be deleted Feb. 9th): https://console-openshift-console.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com/
+  - usernames: user{your_user_number}, e.g. user1, user2, user3, user4, user5, etc.
+  - password: openshift
+- **Dev Spaces URL**: https://devspaces.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com/
+  - use your OpenShift credentials
+- **MinIO Console**: https://minio-console-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
+- **MinIO API**: minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
+  - **Access Key**: minioadmin
+  - **Secret Key**: minioadmin
+  - **Bucket Naming Convention**: ansible-test-{your_user_number} (e.g. ansible-test-1)
+  - **Object Naming Convention**: test-file-object (no constraints on this)
 
 ## Getting Started 
 Under the rh1.minio collection directory, go to **plugins** &rarr; **modules** &rarr; **[bucket.py](plugins/modules/bucket.py)**. The functionality to create a MinIO bucket is given to you. 
