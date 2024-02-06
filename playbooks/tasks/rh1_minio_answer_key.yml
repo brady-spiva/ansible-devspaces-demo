@@ -35,7 +35,7 @@
         access_key: "{{ access_key }}"
         secret_key: "{{ secret_key }}"
         src: hello_world.txt
-        mode: fput
+        mode: put
 
     - name: Print info
       ansible.builtin.debug:
@@ -50,7 +50,7 @@
         access_key: "{{ access_key }}"
         secret_key: "{{ secret_key }}"
         dest: "fresh_download_hello_world.txt"
-        mode: fget
+        mode: get
 
     - name: Print info
       ansible.builtin.debug:
