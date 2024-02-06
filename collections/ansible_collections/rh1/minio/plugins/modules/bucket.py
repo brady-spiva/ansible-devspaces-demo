@@ -124,10 +124,13 @@ def run_module():
     if module.check_mode:
         module.exit_json(**result)
     
-    # TODO: if the "state" param is "present", then call "make_bucket" function
+    # if the "state" param is "present", then call "make_bucket" function
+    if module.params['state'] == 'present':
+        make_bucket(client=client, name=module.params['name'])
+        # indicate that the module has made a change
+        result['changed'] = True
 
     # TODO: if the "state" param is "absent", then call "remove_bucket" function
-
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results
