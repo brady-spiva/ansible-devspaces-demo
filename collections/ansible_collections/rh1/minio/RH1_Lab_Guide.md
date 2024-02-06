@@ -6,22 +6,29 @@ This lab is designed to provide a hands-on experience with creating custom Ansib
 | Module |     Operations     | 
 |--------|--------------------|
 | Bucket | add, remove		  |
-| Object | fput, fget, remove |
+| Object | put, get, remove |
 
 The main files you will need to edit include: 
 <!-- add links to these files -->
 - [bucket.py](plugins/modules/bucket.py)
+  - Add the functionality to remove a bucket.
 - [object.py](plugins/modules/object.py)
-- [rh1_minio_test.yml](../../../../playbooks/tasks/rh1_minio_test.yml) 
+  - Add the funcationliy to put, get, and remove an object.
+- [rh1_minio_test.yml](../../../../playbooks/tasks/rh1_minio_test.yml)
+  - Add new plays / tasks to test the new operations.
 
-Credentials and endpoints:
-- MinIO Console: https://minio-console-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
-- MinIO API: minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
-- Access Key: minioadmin
-- Secret Key: minioadmin
-- Bucket Nameing Convention: ansible-test-{your_user_number} (e.g. ansible-test-1)
-- Object Naming Convention: test-file-object (no constraints on this, don't be too profane!)
-- 
+### Credentials and endpoints:
+- **OpenShift Cluster URL** (will be deleted Feb. 9th): https://console-openshift-console.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com/
+  - usernames: user{your_user_number}, e.g. user1, user2, user3, user4, user5, etc.
+  - password: openshift
+- **Dev Spaces URL**: https://devspaces.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com/
+  - use your OpenShift credentials
+- **MinIO Console**: https://minio-console-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
+- **MinIO API**: minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com
+  - **Access Key**: minioadmin
+  - **Secret Key**: minioadmin
+  - **Bucket Naming Convention**: ansible-test-{your_user_number} (e.g. ansible-test-1)
+  - **Object Naming Convention**: test-file-object (no constraints on this)
 
 ## Getting Started 
 Under the rh1.minio collection directory, go to **plugins** &rarr; **modules** &rarr; **[bucket.py](plugins/modules/bucket.py)**. The functionality to create a MinIO bucket is given to you. 
@@ -66,7 +73,9 @@ ansible-playbook rh1_minio_test.yml
 
 Go to the MinIO console (play.min.io) and log in with the provided credentials. Search for your newly created bucket. 
 
-Take a few minutes to see how the module interacts with the playbook before moving on to the next steps. 
+Take a few minutes to ensure you understand how the module interacts with the playbook before moving on to the adding new functionality.
+
+That's it! You're ready to start adding new functionality to these modules. If you finish early, work on the follow Extra Credit items:
 
 ## Extra Credit
 - [ ] Add a new operation to the bucket module to list all buckets.
@@ -75,7 +84,6 @@ Take a few minutes to see how the module interacts with the playbook before movi
 - [ ] Add a new operation to the object module to copy an object between buckets (or to a new bucket!).
 - [ ] Add a new operation to the object module to get the URL of an object.
 - [ ] Add a new operation to the object module to set the metadata of an object.
-- [ ] 
 
 ## Resources
 - [RH1 2024 NA Lab - Simplified: Custom Ansible Modules](https://docs.google.com/presentation/d/1sOBHXvuBTziCeVQEjvlfaGCYb1sS6xntPAlyfsDplrA/edit#slide=id.g2651b4b0f0a_0_10)

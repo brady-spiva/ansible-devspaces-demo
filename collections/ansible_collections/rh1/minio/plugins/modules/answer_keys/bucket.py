@@ -80,8 +80,12 @@ def make_bucket(client, name):
         return "Bucket" + name + "already exists"
 
 def remove_bucket(client, name):
-    # TODO: remove bucket with the provided name
-    raise NotImplementedError("remove_bucket not implemented")
+    buckets = client.list_buckets()
+    if name in buckets: 
+        client.remove_bucket(name)
+        return "Bucket" + name + "was removed." 
+    else: 
+        return "Bucket" + name + "does not exist"
 
 def run_module():
     # define available arguments/parameters a user can pass to the module
@@ -93,9 +97,9 @@ def run_module():
         secret_key=dict(type='str', required=True),
     )
 
-    # seed the result dict in the object
-    # we primarily care about changed and state
-    # changed is if this module effectively modified the target
+    # seed the result dict in the object.
+    # we primarily care about changed and state.
+    # changed is if this module effectively modified the target.
     # state will include any data that you want your module to pass back
     # for consumption, for example, in a subsequent task
     result = dict(
@@ -123,14 +127,21 @@ def run_module():
     # state with no modifications
     if module.check_mode:
         module.exit_json(**result)
-    
-    # TODO: if the "state" param is "present", then call "make_bucket" function
 
-    # TODO: if the "state" param is "absent", then call "remove_bucket" function
+    if module.params['state'] == "present": 
+        make_bucket(
+            client=client,
+            name=module.params['name'],
+        )
 
+    elif module.params['state'] == "absent": 
+        remove_bucket(
+            client=client, 
+            name=module.params['name']
+        )
 
     # in the event of a successful module execution, you will want to
-    # simple AnsibleModule.exit_json(), passing the key/value results
+    # call AnsibleModule.exit_json(), passing the key/value results
     module.exit_json(**result)
 
 
