@@ -3,10 +3,11 @@
 - name: Testing Bucket Creation & Removal
   hosts: localhost
   vars:
-    endpoint: "play.min.io"
+    minio_url: "minio-s3-minio.apps.cluster-2c6z6.2c6z6.sandbox2771.opentlc.com/"
     access_key: "minioadmin"
     secret_key: "minioadmin"
     bucket_name: "ansible-test"
+    object_name: "test-file-object"
   tasks:
     #### Creating a bucket
     - name: Create a bucket
